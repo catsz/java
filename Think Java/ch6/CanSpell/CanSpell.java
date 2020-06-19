@@ -15,8 +15,7 @@ public class CanSpell {
 			Tlist.add(var);
 		}
 		
-		for (int i = 0; i < Sarray.length; i++) {
-			Character v = Sarray[i];
+		for (Character v : Sarray) {
 			
 			if (Tlist.contains(v)) {
 				Tlist.remove(v);
