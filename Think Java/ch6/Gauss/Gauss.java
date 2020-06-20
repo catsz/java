@@ -6,7 +6,7 @@ public class Gauss {
 	
 	public static double nextD() {
 		if (!in.hasNextDouble()) {
-			System.out.printf("%s is not a double please input integer: ", in.next());
+			System.out.printf("%s is not a double please input double: ", in.next());
 			return nextD();
 		} else {
 			return in.nextDouble();
