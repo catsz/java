@@ -24,22 +24,23 @@ public class indexOfMax {
 	}
 	
 	public static int[] STI(String s) {
-		List<Integer> rtn1 = new ArrayList<Integer>();
-		int[] rtn3;
+		List<Integer> rtn = new ArrayList<Integer>();
+		int[] rtn2;
 
 		for (String retval: s.split(",")) {
          
 		 try {
-		    rtn1.add(Integer.parseInt(retval));
+			int v = Integer.parseInt(retval);
+		    rtn.add(v);
 			System.out.println(retval);
-		 } catch (Exception ex9) {
+		 } catch (Exception ex) {
 		 }
         }
-		rtn3 = new int[rtn1.size()];
-		for (int i1 = 0; i1 < rtn1.size(); i1++) {
-			rtn3[i1] = rtn1.get(i1);
+		rtn2 = new int[rtn.size()];
+		for (int i1 = 0; i1 < rtn.size(); i1++) {
+			rtn2[i1] = rtn.get(i1);
 		}
-		return rtn3;
+		return rtn2;
 
 	}
 	
