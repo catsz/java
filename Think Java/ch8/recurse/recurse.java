@@ -64,7 +64,8 @@ public class recurse {
 		return new String(s2);
 	}
 	
-	public static boolean isPalindrome(String s) {
+	public static boolean isPalindrome(String s1) {
+		String s = s1.toLowerCase();
 		if (length(s) == 1 || length(s) == 2) {
 			if (length(s) == 2) {
 				if (first(s) == s.charAt(1)) {
@@ -85,6 +86,6 @@ public class recurse {
 	}
 	
 	public static void main(String[] args){
-		System.out.print(isPalindrome("yeey"));
+		
 	}
 }
