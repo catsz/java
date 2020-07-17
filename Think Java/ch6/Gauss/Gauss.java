@@ -1,6 +1,5 @@
 import java.util.Scanner;
 
-
 public class Gauss {
 	public static Scanner in = new Scanner(System.in);
 	
