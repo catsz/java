@@ -1,8 +1,3 @@
-import java.util.Scanner;
-import java.util.List;
-import java.util.ArrayList;
-import java.awt.Rectangle;
-import java.awt.Point;
 
 public class Tile {
 	private char letter;
