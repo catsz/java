@@ -34,10 +34,10 @@ public class Card {
         if (this.suit > that.suit) {
             return 1;
         }
-        if (this.rank < that.rank) {
+        if (this.rank < that.rank && this.rank != 1 || that.rank == 1) {
             return -1;
         }
-        if (this.rank > that.rank) {
+        if (this.rank == 1 || this.rank > that.rank) {
             return 1;
         }
         return 0;
@@ -107,6 +107,13 @@ public class Card {
 			cards[i] = new Card(getRank(i), getSuit(i));
 		}
 		return cards;
+	}
+	
+	public static void main(String[] args) {
+		Card test = new Card(5, 0);
+		Card test1 = new Card(1, 0);
+		
+		System.out.print(test.compareTo(test1));
 	}
 
 }
