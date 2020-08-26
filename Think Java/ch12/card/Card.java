@@ -109,11 +109,37 @@ public class Card {
 		return cards;
 	}
 	
-	public static void main(String[] args) {
-		Card test = new Card(5, 0);
-		Card test1 = new Card(1, 0);
+	public static int[] suitHist(Card[] that) {
+		int[] rtn = new int[4];
 		
-		System.out.print(test.compareTo(test1));
+		for (int i = 0; i < that.length; i++) {
+			rtn[that[i].suit]++;
+		}
+		return rtn;
+	}
+	
+	public static boolean hasFlush(Card[] that) {
+		int[] thatHist = Card.suitHist(that);
+		
+		for (int i = 0; i < thatHist.length; i++) {
+			if (thatHist[i] <= 5) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void main(String[] args) {
+		Card[] test = {
+			new Card(1, 2), new Card(1, 3), new Card(3, 1), new Card(1, 1), new Card(3, 1), new Card(3, 1), new Card(3, 1), new Card(3, 1)
+		};
+		int[] test1 = Card.suitHist(test);
+		
+		for (int i = 0; i < test1.length; i++) {
+			System.out.println(test1[i]);
+		}
+		
+		System.out.print(Card.hasFlush(test));
 	}
 
 }
