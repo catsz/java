@@ -1,4 +1,4 @@
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A deck of playing cards (of fixed length).
@@ -7,7 +7,6 @@ public class Deck {
 
     // This is a class variable so we don't have to create
     // a new Random object every time we call randomInt.
-    private static Random random = new Random();
 
     private Card[] cards;
 
@@ -63,6 +62,11 @@ public class Deck {
      * Randomly permutes the array of cards.
      */
     public void shuffle() {
+		for (int i = 0; i < this.cards.length; i++) {
+			int RN = ThreadLocalRandom.current().nextInt(i, this.cards.length);
+			
+			this.swapCards(i, RN);
+		}
     }
 
     /**
@@ -76,6 +80,9 @@ public class Deck {
      * Swaps the cards at indexes i and j.
      */
     private void swapCards(int i, int j) {
+		Card card = this.cards[i];
+		this.cards[i] = this.cards[j];
+		this.cards[j] = card;
     }
 
     /**
@@ -138,6 +145,7 @@ public class Deck {
 	
 	public static void main(String[] args) {
 		Deck test = new Deck();
+		test.shuffle();
 		
 		System.out.print(test);
 	}
