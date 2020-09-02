@@ -9,12 +9,14 @@ public class Deck {
     // a new Random object every time we call randomInt.
 
     private Card[] cards;
-
+	private final int length;
+	
     /**
      * Constructs a standard deck of 52 cards.
      */
     public Deck() {
         this.cards = new Card[52];
+		this.length = this.cards.length;
         int index = 0;
         for (int suit = 0; suit <= 3; suit++) {
             for (int rank = 1; rank <= 13; rank++) {
@@ -29,6 +31,7 @@ public class Deck {
      */
     public Deck(int n) {
         this.cards = new Card[n];
+		this.length = this.cards.length;
     }
 
     /**
@@ -70,13 +73,6 @@ public class Deck {
     }
 
     /**
-     * Chooses a random number between low and high, including both.
-     */
-    private static int randomInt(int low, int high) {
-        return 0;
-    }
-
-    /**
      * Swaps the cards at indexes i and j.
      */
     private void swapCards(int i, int j) {
@@ -89,6 +85,10 @@ public class Deck {
      * Sorts the cards (in place) using selection sort.
      */
     public void selectionSort() {
+		for (int i = 0; i < this.cards.length; i++) {
+			int lowest = this.indexLowest(i, this.cards.length);
+			this.swapCards(i, lowest);
+		}
     }
 
     /**
@@ -96,7 +96,15 @@ public class Deck {
      * between low and high inclusive.
      */
     private int indexLowest(int low, int high) {
-        return 0;
+		Card lowest = this.cards[low];
+		int rtn = low;
+		for (int i = low + 1; i < high; i++) {
+			if (this.cards[i].compareTo(lowest) == -1) {
+				lowest = this.cards[i];
+				rtn = i;
+			}
+		}
+		return rtn;
     }
 
     /**
@@ -114,14 +122,43 @@ public class Deck {
      * Combines two previously sorted subdecks.
      */
     private static Deck merge(Deck d1, Deck d2) {
-        return null;
+        Deck d3 = new Deck(d1.length + d2.length);
+		
+		int i = 0;
+		int j = 0;
+		
+		for (int k = 0; k < d3.length; k++) {
+			if (i >= d1.length) {
+				d3.set(k, d2.getCards()[j]);
+				j++;
+			} else if (j >= d2.length) {
+				d3.set(k, d1.getCards()[i]);
+				i++;
+			} else {
+				if (d1.getCards()[i].compareTo(d2.getCards()[j]) == -1) {
+					d3.set(k, d1.getCards()[i]);
+					i++;
+				} else {
+					d3.set(k, d2.getCards()[j]);
+					j++;
+				}
+			}
+		}
+		return d3;
     }
 
     /**
      * Returns a sorted copy of the deck using selection sort.
      */
     public Deck almostMergeSort() {
-        return this;
+		Deck d1;
+		Deck d2;
+			d1 = this.subdeck(0, this.length / 2);
+			d2 = this.subdeck((this.length / 2) + 1, this.length - 1);
+		d1.selectionSort();
+		d2.selectionSort();
+		
+		return Deck.merge(d1, d2);
     }
 
     /**
@@ -143,11 +180,20 @@ public class Deck {
     private void insert(Card card, int i) {
     }
 	
+	public boolean isEmpty() {
+		return this.cards.length == 0;
+	}
+	
+	public void set(int index, Card card) {
+		this.cards[index] = card;
+	}
+	
 	public static void main(String[] args) {
 		Deck test = new Deck();
 		test.shuffle();
 		
-		System.out.print(test);
+		System.out.println(test + "\n");
+		System.out.print(test.almostMergeSort());
 	}
 
 }
