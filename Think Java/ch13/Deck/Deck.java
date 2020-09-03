@@ -153,8 +153,9 @@ public class Deck {
     public Deck almostMergeSort() {
 		Deck d1;
 		Deck d2;
-			d1 = this.subdeck(0, this.length / 2);
-			d2 = this.subdeck((this.length / 2) + 1, this.length - 1);
+		d1 = this.subdeck(0, (this.length / 2) - 1);
+		d2 = this.subdeck((this.length / 2), this.length - 1);
+		
 		d1.selectionSort();
 		d2.selectionSort();
 		
@@ -165,7 +166,15 @@ public class Deck {
      * Returns a sorted copy of the deck using merge sort.
      */
     public Deck mergeSort() {
-        return this;
+		if (this.length <= 1) {
+			return this;
+		}
+		Deck d1 = this.subdeck(0, (this.length / 2) - 1);
+		Deck d2 = this.subdeck((this.length / 2), this.length - 1);
+			
+		d1 = d1.mergeSort();
+		d2 = d2.mergeSort();
+		return Deck.merge(d1, d2);
     }
 
     /**
@@ -188,12 +197,19 @@ public class Deck {
 		this.cards[index] = card;
 	}
 	
+	public void fill() {
+		for (int i = 0; i < this.length; i++) {
+			this.cards[i] = new Card(Card.getRank(i), Card.getSuit(i));
+		}
+	}
+	
 	public static void main(String[] args) {
 		Deck test = new Deck();
 		test.shuffle();
 		
 		System.out.println(test + "\n");
-		System.out.print(test.almostMergeSort());
+		System.out.print(test.mergeSort());
+		
 	}
 
 }
