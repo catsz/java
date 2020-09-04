@@ -9,7 +9,7 @@ public class Deck {
     // a new Random object every time we call randomInt.
 
     private Card[] cards;
-	private final int length;
+	public final int length;
 	
     /**
      * Constructs a standard deck of 52 cards.
@@ -33,6 +33,15 @@ public class Deck {
         this.cards = new Card[n];
 		this.length = this.cards.length;
     }
+	
+	public Deck(Deck d, int n) {
+		this.cards = new Card[d.length + n];
+		
+		for (int i = 0; i < d.length; i++) {
+			this.set(i, d.getCards()[i]);
+		}
+		this.length = this.cards.length;
+	}
 
     /**
      * Gets the internal cards array.
