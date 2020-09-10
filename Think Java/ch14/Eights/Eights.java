@@ -6,7 +6,7 @@ import java.util.Scanner;
  */
 public class Eights {
 
-    private Player one;
+    private Genius one;
     private Player two;
     private Hand drawPile;
     private Hand discardPile;
@@ -20,7 +20,7 @@ public class Eights {
         deck.shuffle();
 
         // deal cards to each player
-        one = new Player("Allen");
+        one = new Genius("Allen");
         deck.deal(one.getHand(), 5);
         two = new Player("Chris");
         deck.deal(two.getHand(), 5);
@@ -60,6 +60,10 @@ public class Eights {
         // shuffle the draw pile
         drawPile.shuffle();
     }
+	
+	public void reshuffleN() {
+		if (drawPile.isEmpty()) reshuffle();
+	}
 
     /**
      * Returns a card from the draw pile.
@@ -91,7 +95,7 @@ public class Eights {
         discardPile.display();
         System.out.print("Draw pile: ");
         System.out.println(drawPile.size() + " cards");
-        in.nextLine();
+        //in.nextLine();
     }
 
     /**
@@ -123,13 +127,28 @@ public class Eights {
         one.displayScore();
         two.displayScore();
     }
+	
+	public void playGame100() {
+        Player player = one;
+
+        // keep playing until there's a winner
+        for (int i = 0; i < 100; i++) {
+            displayState();
+            takeTurn(player);
+            player = nextPlayer(player);
+        }
+
+        // display the final score
+        one.displayScore();
+        two.displayScore();
+    }
 
     /**
      * Creates the game and runs it.
      */
     public static void main(String[] args) {
         Eights game = new Eights();
-        game.playGame();
+        game.playGame100();
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Player {
 
     private String name;
-    private Hand hand;
+    protected Hand hand;
 
     /**
      * Constructs a player with an empty hand.
@@ -34,14 +34,11 @@ public class Player {
      * Removes and returns a legal card from the player's hand.
      */
     public Card play(Eights eights, Card prev) {
-        Card card = searchFor8(prev);
-		if (card == null) {
-			card = searchForHRank(prev);
-		} 
-		if (card == null) {
-			card = drawForMatch(eights, prev);
-		}
-		return card;
+        Card card = searchForMatch(prev);
+        if (card == null) {
+            card = drawForMatch(eights, prev);
+        }
+        return card;
     }
 
     /**
@@ -57,7 +54,7 @@ public class Player {
         return null;
     }
 	
-	public Card searchForHRank(Card prev) {
+	public Card searchForHRank(Eights eights, Card prev) {
 		int i1 = 0;
 		for (int i = 0; i < hand.size(); i++) {
 			if (hand.getCard(i).getSuit() == prev.getSuit()) {
@@ -71,9 +68,16 @@ public class Player {
 				i1 = i;
 			}
 		}
-		if (cardMatches(hand.getCard(i1), prev)) {
-			return hand.popCard(i1);
-		} else return null;
+		
+		
+		eights.reshuffleN();
+		try {
+			if (cardMatches(hand.getCard(i1), prev)) {
+				return hand.popCard(i1);
+			} else return null;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	public Card searchFor8(Card prev) {
