@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  * Simulates a game of Crazy Eights.
@@ -6,24 +7,25 @@ import java.util.Scanner;
  */
 public class Eights {
 
-    private Genius one;
-    private Player two;
     private Hand drawPile;
     private Hand discardPile;
     private Scanner in;
+	private ArrayList<Player> players;
 
     /**
      * Initializes the state of the game.
      */
-    public Eights() {
+    public Eights(int n) {
         Deck deck = new Deck("Deck");
         deck.shuffle();
+		this.players = new ArrayList<Player>();
 
         // deal cards to each player
-        one = new Genius("Allen");
-        deck.deal(one.getHand(), 5);
-        two = new Player("Chris");
-        deck.deal(two.getHand(), 5);
+        for (int i = n; i > 0; i--) {
+			Player temp = new Player(Integer.toString(i));
+			deck.deal(temp.getHand(), 5);
+			this.players.add(temp);
+		}
 
         // turn one card face up
         discardPile = new Hand("Discards");
@@ -41,7 +43,12 @@ public class Eights {
      * Returns true if either hand is empty.
      */
     public boolean isDone() {
-        return one.getHand().isEmpty() || two.getHand().isEmpty();
+        for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).getHand().isEmpty()) {
+				return true;
+			}
+		}
+		return false;
     }
 
     /**
@@ -79,23 +86,22 @@ public class Eights {
      * Switches players.
      */
     public Player nextPlayer(Player current) {
-        if (current == one) {
-            return two;
-        } else {
-            return one;
-        }
+		if (players.size() <= players.indexOf(current) + 1) {
+			return players.get(0);
+		} else return players.get(players.indexOf(current) + 1);
     }
 
     /**
      * Displays the state of the game.
      */
     public void displayState() {
-        one.display();
-        two.display();
+        for (int i = 0; i < players.size(); i++) {
+			players.get(i).display();
+		}
         discardPile.display();
         System.out.print("Draw pile: ");
         System.out.println(drawPile.size() + " cards");
-        //in.nextLine();
+        in.nextLine();
     }
 
     /**
@@ -114,7 +120,7 @@ public class Eights {
      * Plays the game.
      */
     public void playGame() {
-        Player player = one;
+        Player player = players.get(0);
 
         // keep playing until there's a winner
         while (!isDone()) {
@@ -124,12 +130,13 @@ public class Eights {
         }
 
         // display the final score
-        one.displayScore();
-        two.displayScore();
+        for (int i = 0; i < players.size(); i++) {
+			players.get(i).displayScore();
+		}
     }
 	
 	public void playGame100() {
-        Player player = one;
+        Player player = players.get(0);
 
         // keep playing until there's a winner
         for (int i = 0; i < 100; i++) {
@@ -139,16 +146,17 @@ public class Eights {
         }
 
         // display the final score
-        one.displayScore();
-        two.displayScore();
+        for (int i = 0; i < players.size(); i++) {
+			players.get(i).displayScore();
+		}
     }
 
     /**
      * Creates the game and runs it.
      */
     public static void main(String[] args) {
-        Eights game = new Eights();
-        game.playGame100();
+        Eights game = new Eights(3);
+        game.playGame();
     }
 
 }
