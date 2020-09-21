@@ -73,13 +73,30 @@ public class GridCanvas extends Canvas {
      * @param c column index
      * @return 1 or 0
      */
-    public int test(int r, int c) {
+    public int test(int r1, int c1) {
+		int r = r1;
+		int c = c1;
+		
         try {
             if (array[r][c].isOn()) {
                 return 1;
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            // cell doesn't exist
+            if (r >= numRows()) {
+				r = 0;
+			} else if (r < 0) {
+				r = numRows() - 1;
+			}
+			
+			if (c >= numCols()) {
+				c = 0;
+			} else if (c < 0) {
+				c = numCols() - 1;
+			}
+			
+			if (array[r][c].isOn()) {
+                return 1;
+            }
         }
         return 0;
     }

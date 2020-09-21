@@ -1,4 +1,5 @@
 import javax.swing.JFrame;
+import java.util.Scanner;
 
 /**
  * Conway's Game of Life.
@@ -6,18 +7,21 @@ import javax.swing.JFrame;
 public class Conway {
 
     private GridCanvas grid;
+	private Console CMD;
+	private static Scanner in = new Scanner(System.in);
 
     /**
      * Creates a grid with two Blinkers.
      */
     public Conway() {
         grid = new GridCanvas(10, 20, 30);
-        grid.turnOn(2, 1);
+		CMD = new Console(grid);
+		CMD.start();
         grid.turnOn(2, 2);
-        grid.turnOn(2, 3);
-        grid.turnOn(1, 7);
-        grid.turnOn(2, 7);
-        grid.turnOn(3, 7);
+		grid.turnOn(4, 3);
+		grid.turnOn(3, 3);
+		grid.turnOn(4, 2);
+		grid.turnOn(4, 1);
     }
 
     /**
@@ -114,18 +118,20 @@ public class Conway {
      */
     private void mainloop() {
         while (true) {
-
-            // update the drawing
-            this.update();
-            grid.repaint();
-			System.out.println(grid.countOn());
-
-            // delay the simulation
-            try {
+			try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 // do nothing
             }
+			if (CMD.step) {
+				CMD.step = false;
+			} else if (CMD.pause) {
+				continue;
+			}
+
+            // update the drawing
+            this.update();
+            grid.repaint();
         }
     }
 
