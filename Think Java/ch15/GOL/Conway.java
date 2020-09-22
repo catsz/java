@@ -1,5 +1,9 @@
 import javax.swing.JFrame;
 import java.util.Scanner;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.FileNotFoundException;
 
 /**
  * Conway's Game of Life.
@@ -23,6 +27,37 @@ public class Conway {
 		grid.turnOn(4, 2);
 		grid.turnOn(4, 1);
     }
+	
+	public Conway(String path) {
+		File file = new File(path);
+		List<String> cells = new ArrayList<String>();
+		Scanner scan = new Scanner(System.in);
+		try {
+			scan = new Scanner(file);
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+			System.exit(1);
+		}
+		while (scan.hasNextLine()) {
+			String temp = scan.nextLine();
+			if (temp.charAt(0) != '!') {
+				cells.add(temp);
+			}
+		}
+		
+		grid = new GridCanvas(cells.size() + 3, cells.get(0).toCharArray().length + 3, 50);
+		CMD = new Console(grid);
+		CMD.start();
+		
+		for (int i = 0; i < cells.size(); i++) {
+			for (int i1 = 0; i1 < cells.get(i).toCharArray().length; i1++) {
+				char cell = cells.get(i).toCharArray()[i1];
+				if (cell == 'O') {
+					grid.turnOn(i + 1, i1 + 1);
+				}
+			}
+		}
+	}
 
     /**
      * Counts the number of live neighbors around a cell.
@@ -119,7 +154,7 @@ public class Conway {
     private void mainloop() {
         while (true) {
 			try {
-                Thread.sleep(500);
+                Thread.sleep(CMD.speed);
             } catch (InterruptedException e) {
                 // do nothing
             }
@@ -142,7 +177,7 @@ public class Conway {
      */
     public static void main(String[] args) {
         String title = "Conway's Game of Life";
-        Conway game = new Conway();
+        Conway game = new Conway("glider.cells");
         JFrame frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
