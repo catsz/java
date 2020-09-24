@@ -3,7 +3,7 @@ import java.util.NoSuchElementException;
 
 public class Console extends Thread {
 	private GridCanvas grid;
-	public boolean pause = false;
+	public boolean pause = true;
 	public boolean step = false;
 	public int speed = 350;
 	

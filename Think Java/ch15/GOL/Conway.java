@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 /**
  * Conway's Game of Life.
@@ -29,34 +30,207 @@ public class Conway {
     }
 	
 	public Conway(String path) {
+		String[] ext = path.split("\\.");
 		File file = new File(path);
 		List<String> cells = new ArrayList<String>();
 		Scanner scan = new Scanner(System.in);
 		try {
-			scan = new Scanner(file);
-		} catch (FileNotFoundException ex) {
-			ex.printStackTrace();
-			System.exit(1);
-		}
-		while (scan.hasNextLine()) {
-			String temp = scan.nextLine();
-			if (temp.charAt(0) != '!') {
-				cells.add(temp);
+				scan = new Scanner(file);
+			} catch (FileNotFoundException ex) {
+				ex.printStackTrace();
+				System.exit(1);
 			}
-		}
-		
-		grid = new GridCanvas(cells.size() + 3, cells.get(0).toCharArray().length + 3, 50);
-		CMD = new Console(grid);
-		CMD.start();
-		
-		for (int i = 0; i < cells.size(); i++) {
-			for (int i1 = 0; i1 < cells.get(i).toCharArray().length; i1++) {
-				char cell = cells.get(i).toCharArray()[i1];
-				if (cell == 'O') {
-					grid.turnOn(i + 1, i1 + 1);
+		//see if it's .rle or .cells
+		if (ext[1].equals("rle")) {
+			
+			while (scan.hasNextLine()) {
+				String temp = scan.nextLine();
+				if (temp.charAt(0) != '#') {
+					cells.add(temp);
+				}
+			}
+			String[] size = cells.get(0).split(",");
+			int x = -1;
+			int y = -1;
+			
+			for (int i = 0; i < size.length; i++) {
+				char[] SChars = size[i].toCharArray();
+				String temp = "";
+				
+				for (int i1 = 4; i1 < SChars.length; i1++) {
+					temp = temp + SChars[i1];
+				}
+				if (x != -1) {
+					y = Integer.parseInt(temp.split(" ")[1]);
+				} else {
+					x = Integer.parseInt(temp);
+				}
+			}
+			
+			grid = new GridCanvas(y + 3, x + 3, 50);
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			/////////////////////////////////////////////////////////////////////////////////
+			
+			int col = 0;
+			int row = 0;
+			int numStart = -1;
+			int n = 1;
+			for (int i = 1; i < cells.size(); i++) {
+				String line = cells.get(i);
+				char[] rleChar = line.toCharArray();
+				System.out.println("line = " + line);
+				System.out.println("char array length = " + rleChar.length);
+				
+				int i1 = 0;
+				while((i1 < rleChar.length) && (rleChar[i1] != '!')) {
+
+					// $ = move to next row
+					if(rleChar[i1] == '$') {
+						row++;
+						numStart = -1;
+						col = 0;
+					} else if (rleChar[i1] >= '0' && rleChar[i1] <= '9') {
+						numStart = i1;
+					} else if (rleChar[i1] == 'b') {
+						if(numStart == -1) {
+							n = 1;
+						} else {
+							n = Integer.parseInt(line.substring(numStart, i1));
+						}
+						
+						col += n;
+						
+						numStart = -1;
+					} else if (rleChar[i1] == 'o') {
+						if(numStart == -1) {
+							n = 1;
+						} else {
+							n = Integer.parseInt(line.substring(numStart, i1));
+						}
+						
+						for(int i2 = 0; i2 < n; i2++) {
+						  grid.turnOn(row, col+i2);
+						}
+						
+						numStart = -1;
+					}
+					
+					i1++;
+
+				}
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			/////////////////////////////////////////////////////////////////////////////////
+			/*
+			boolean KG = true;
+			for (int i = 1; i < cells.size() && KG; i++) {
+				String[] line = cells.get(i).split("$");
+				
+				for (int i1 = 0; i1 < line.length && KG; i1++) {
+					char[] cell = line[i1].toCharArray();
+					int col = 0;
+					int n = 1;
+					
+					for (int i2 = 0; i2 < cell.length; i2++) {
+						if (cell[i2] == '!') {
+							KG = false;
+							break;
+						}
+						System.out.println(cell[i2]);
+						try {
+							n = Integer.parseInt(String.valueOf(cell[i2]));
+							System.out.println(cell[i2]);
+							System.out.println(n);
+						} catch (Exception ex) {
+							for (int i3 = 0; i3 < n; i3++) {
+								System.out.println("in loop");
+								if (cell[i2] == 'b') {
+									
+								} else if (cell[i2] == 'o') {
+									grid.turnOn(i1, col);
+								} else if (cell[i2] == '$') {
+									break;
+								}
+								col++;
+							}
+						}
+					}
+				}	
+			}
+			*/
+		} else {
+			
+			//for every line that doesn't start with ! add it to the list
+			while (scan.hasNextLine()) {
+				String temp = scan.nextLine();
+				if (temp.charAt(0) != '!') {
+					cells.add(temp);
+				}
+			}
+			
+			//make the canvas
+			grid = new GridCanvas(cells.size() + 3, cells.get(0).toCharArray().length + 3, 50);
+			
+			//first loop to go through the list
+			for (int i = 0; i < cells.size(); i++) {
+				//second loop to loop through all the characters in the strings
+				for (int i1 = 0; i1 < cells.get(i).toCharArray().length; i1++) {
+					//get the character that the two loops are on
+					char cell = cells.get(i).toCharArray()[i1];
+					
+					//see if it is a active cell or not
+					if (cell == 'O') {
+						//if so turn it on
+						grid.turnOn(i + 1, i1 + 1);
+					}
 				}
 			}
 		}
+		CMD = new Console(grid);
+		CMD.start();
 	}
 
     /**
@@ -177,7 +351,7 @@ public class Conway {
      */
     public static void main(String[] args) {
         String title = "Conway's Game of Life";
-        Conway game = new Conway("glider.cells");
+        Conway game = new Conway("glider.rle");
         JFrame frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
